@@ -2,7 +2,7 @@
     "gitlens.autolinks": [
         {
             "prefix": "#",
-            "url": "https://gitlab.com/skyant/python/ui/data.entity/-/issues/<num>"
+            "url": "https://gitlab.com/skyant/python/ui/-/issues/<num>"
         }
     ],
     "autoDocstring.quoteStyle": "'''",
