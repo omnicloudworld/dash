@@ -1,11 +1,6 @@
 ---
 hide:
-    - toc
-    - footer
     - navigation
 ---
 
-
 #
-
-

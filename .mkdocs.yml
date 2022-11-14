@@ -2,6 +2,15 @@
 nav:
 
     - 'HOME': index.md
+    - 'QUICK START': start.md
+    - 'BOOTSTRAPPED': bootstrapped.md
+    - 'SERVERS': servers.md
+    - 'REFERENCES':
+        - references/index.md
+        - 'BOOTSTRAPPED': references/bootstrapped.md
+        - 'COLAB': references/colab.md
+        - 'PYSCRIPT': references/pyscript.md
+        - 'SERVERS': references/servers.md 
 
 
 site_name: skyant.ui
@@ -31,6 +40,7 @@ theme:
         - search.suggest
         - navigation.tabs
         - navigation.tabs.sticky
+        - content.code.annotate
 
 
 copyright: Copyright &copy; 2020 Iurii Tarasenko
@@ -73,3 +83,9 @@ plugins:
     - section-index
 
 
+markdown_extensions:
+    - pymdownx.highlight:
+            anchor_linenums: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences

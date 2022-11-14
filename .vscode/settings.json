@@ -2,7 +2,7 @@
     "gitlens.autolinks": [
         {
             "prefix": "#",
-            "url": "https://gitlab.com/skyant/data/data.entity/-/issues/<num>"
+            "url": "https://gitlab.com/skyant/python/ui/-/issues/<num>"
         }
     ],
     "autoDocstring.quoteStyle": "'''",
@@ -25,6 +25,27 @@
             ]
         }
     },
-    "terminal.integrated.defaultProfile.linux": "local"
+    "terminal.integrated.defaultProfile.linux": "local",
+    "cSpell.words": [
+        "asgi",
+        "asgiref",
+        "Asyncio",
+        "Comfortaa",
+        "crossorigin",
+        "hypercorn",
+        "inlinehilite",
+        "jupyterlab",
+        "layouter",
+        "linenums",
+        "LITERA",
+        "metatag",
+        "metatags",
+        "mkdocstrings",
+        "multipage",
+        "Plotly",
+        "SPACELAB",
+        "wght",
+        "wsgi"
+    ]
 
 }

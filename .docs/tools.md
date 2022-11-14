@@ -1,11 +1,9 @@
 ---
 hide:
-    - toc
-    - footer
     - navigation
 ---
 
 
 #
 
-
+::: skyant.ui.app.tools
