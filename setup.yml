@@ -20,12 +20,13 @@ EMAIL: info@skyant.dev
 
 PYTHON_REQ: '>=3.10'
 REQUIREMENTS:
-    -   dash
+    -   dash[compress]
     -   dash-bootstrap-components
     -   python-jose
     -   asgiref
     -   hypercorn
     -   jupyter-dash
+    -   python-dotenv
 
 
 CLASSIFIERS:

@@ -1,0 +1,7 @@
+dash[compress]
+dash-bootstrap-components
+python-jose
+asgiref
+hypercorn
+jupyter-dash
+python-dotenv

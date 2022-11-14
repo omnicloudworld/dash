@@ -3,21 +3,19 @@
 '''
 
 from dash import html
-from skyant.web.platform import BootstrappedDash, SkyAntServers
 
-class My(SkyAntServers, BootstrappedDash):
+from skyant.ui.app import Bootstrapped, Servers
 
-    def __init__(self, name='sdsd', **kw):
-        super().__init__(name=name, **kw)
+class My(Servers, Bootstrapped):
+    pass
+
 
 app = My(name='sdsds')
-
 
 app.layout = html.Div(
     'sds'
 )
 
-
-
+server = app.asgi_server
 if __name__ == '__main__':
     app.debug_server()

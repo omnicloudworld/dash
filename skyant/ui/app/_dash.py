@@ -1,31 +1,67 @@
 # pylint: disable=missing-docstring
 
+from __future__ import annotations
+
 import re
 from importlib import import_module as im
 from os import environ as env
 from os import path
 from pathlib import Path
+from enum import Enum, unique
 
-import dash_bootstrap_components as dbc
+
 import flask
 import requests
 from asgiref.wsgi import WsgiToAsgi
-from dash import Dash, dcc, html
 from hypercorn.middleware import AsyncioWSGIMiddleware
+
+import dash_bootstrap_components as dbc
+from dash import Dash, dcc, html
+from dash.development.base_component import Component
 from jupyter_dash import JupyterDash
+
 
 base_url = env.get('BASE_URL', '/')
 static_path = path.join(path.dirname(path.abspath(__file__)), 'static')
 
 
-class BootstrappedDash(Dash):
+@unique
+class Themes(Enum):
+    CERULEAN = 'CERULEAN'
+    COSMO = 'COSMO'
+    CYBORG = 'CYBORG'
+    DARKLY = 'DARKLY'
+    FLATLY = 'FLATLY'
+    JOURNAL = 'JOURNAL'
+    LITERA = 'LITERA'
+    LUMEN = 'LUMEN'
+    LUX = 'LUX'
+    MATERIA = 'MATERIA'
+    MINTY = 'MINTY'
+    MORPH = 'MORPH'
+    PULSE = 'PULSE'
+    QUARTZ = 'QUARTZ'
+    SANDSTONE = 'SANDSTONE'
+    SIMPLEX = 'SIMPLEX'
+    SKETCHY = 'SKETCHY'
+    SLATE = 'SLATE'
+    SOLAR = 'SOLAR'
+    SPACELAB = 'SPACELAB'
+    SUPERHERO = 'SUPERHERO'
+    UNITED = 'UNITED'
+    VAPOR = 'VAPOR'
+    YETI = 'YETI'
+    ZEPHYR = 'ZEPHYR'
+
+
+class Bootstrapped(Dash):
     '''
     Prepared a plotly dash class which includes:
     - uploaded a Bootstrap theme;
-    - uploaded Google fonts: Comfortaa, Montserrat, Roboto and Material Icons;
+    - uploaded Google fonts: Comfortaa, Montserrat, Roboto and Material & Awesome Icons;
     - setted up responsive metatag.
 
-    Additionaly the BootstrappedDash class processed environment variables:
+    Additionally the BootstrappedDash class processed environment variables:
     - BASE_URL: leading part of the path;
     - FAVICON_URL:
     '''
@@ -35,28 +71,20 @@ class BootstrappedDash(Dash):
         name: str,
         prevent_initial_callbacks: bool = False,
         suppress_callback_exceptions: bool = True,
-        default_theme: str = 'DARKLY',
+        default_theme: Themes = Themes.COSMO,
         **kw
     ):
 
         assert re.match(r'^(\/[0-9a-z_\-\.\/]+)*\/$', base_url), 'base_url isn\'t correct'
 
-        _themes = [
-            'CERULEAN', 'COSMO', 'CYBORG', 'DARKLY', 'FLATLY', 'JOURNAL',
-            'LITERA', 'LUMEN', 'LUX', 'MATERIA', 'MINTY', 'MORPH', 'PULSE',
-            'QUARTZ', 'SANDSTONE', 'SIMPLEX', 'SKETCHY', 'SLATE', 'SOLAR',
-            'SPACELAB', 'SUPERHERO', 'UNITED', 'VAPOR', 'YETI', 'ZEPHYR'
-        ]
-        assert default_theme in _themes, f'Only predefined theme is allowed. Please select from {_themes}'
-        bootstrap_theme = getattr(im('dash_bootstrap_components.themes'), default_theme)
+        bootstrap_theme = getattr(im('dash_bootstrap_components.themes'), default_theme.value, None)
 
         self._name = name
 
-        external_scripts = external_scripts = [
-        ]
-        self._external_scripts = self._external_scripts if hasattr(self, '_external_scripts') else []
+        external_scripts = []
+        self._external_scripts = getattr(self, '_external_scripts', [])
         self._external_scripts.extend(external_scripts)
-        if 'external_scripts' in kw and kw['external_scripts'] != '':
+        if 'external_scripts' in kw and isinstance(kw['external_scripts']. list):
             self._external_scripts.extend(kw['external_scripts'])
             del kw['external_scripts']
 
@@ -86,24 +114,26 @@ class BootstrappedDash(Dash):
                 'rel': 'stylesheet'
             },
             {
-                'href': 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
+                'href': 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',  # pylint: disable=line-too-long
                 'rel': 'stylesheet'
             }
         ]
-        self._external_stylesheets = self._external_stylesheets if hasattr(self, '_external_stylesheets') else []
+        self._external_stylesheets = getattr(self, '_external_stylesheets', [])
         self._external_stylesheets.extend(external_stylesheets)
         self._external_stylesheets.extend([dbc.icons.FONT_AWESOME, dbc.icons.BOOTSTRAP])
-        self._external_stylesheets.append(bootstrap_theme)
-        if 'external_stylesheets' in kw and kw['external_stylesheets'] != '':
+        if bootstrap_theme:
+            self._external_stylesheets.append(bootstrap_theme)
+        if 'external_stylesheets' in kw and isinstance(kw['external_stylesheets'], list[dict]):
             self._external_stylesheets.extend(kw['external_stylesheets'])
             del kw['external_stylesheets']
 
+        # Adding metatags
         meta_tags = [
             {"name": "viewport", "content": "width=device-width, initial-scale=1"}
         ]
         self._meta_tags = self._meta_tags if hasattr(self, '_meta_tags') else []
         self._meta_tags.extend(meta_tags)
-        if 'meta_tags' in kw and kw['meta_tags'] != '':
+        if 'meta_tags' in kw and isinstance(kw['meta_tags'], list[dict]):
             self._external_stylesheets.extend(kw['meta_tags'])
             del kw['meta_tags']
 
@@ -121,9 +151,7 @@ class BootstrappedDash(Dash):
         )
 
         #  Make layout
-        self._page = html.Section(
-            id='page'
-        )
+        self._page = html.Section(id='page')
         self._location = html.Div(  # for read url from dash
             [
                 dcc.Location(id='url', refresh=False)
@@ -142,14 +170,28 @@ class BootstrappedDash(Dash):
         if 'FAVICON_URL' in env and env['FAVICON_URL'] != '':
             # change default favicon
             Path('assets').mkdir(parents=True, exist_ok=True)
-            img_data = requests.get(env['FAVICON_URL']).content
+            img_data = requests.get(env['FAVICON_URL'], timeout=3).content
             with open('assets/favicon.png', 'wb') as handler:
                 handler.write(img_data)
             self._favicon = 'favicon.png'
 
-    def layouter(self, children):
+    @classmethod
+    @property
+    def theme(cls) -> Themes:
+        '''
+        An Enum object of themes
+
+        Returns:
+            A permitted theme
+        '''
+        return Themes
+
+    def layouter(self, children: list[Component] | Component):
         '''
         This method fill the page layout, exclude location
+
+        Args:
+            children: layout for rendering inside the page section
         '''
         self._page.children = children
         layout = html.Div(
@@ -161,16 +203,20 @@ class BootstrappedDash(Dash):
         self.layout = layout
 
     @property
-    def name(self):
+    def name(self) -> str:
         '''
-        Application name.
+        Application name
+
+        Returns:
+            Application name
         '''
 
         return self._name
 
 
-class SkyAntServers(Dash):
+class Servers(Dash):
     '''
+    Class Servers provides development & two production async servers with static serving & HTTP/2.
     '''
 
     def __init__(
@@ -219,7 +265,7 @@ class SkyAntServers(Dash):
     @property
     def asgi_server(self):
         '''
-        Run service as async for working with asgiref package.
+        Run service as async for working with asgiref package & http/2.
         '''
 
         if path.exists(static_path):
@@ -231,55 +277,51 @@ class SkyAntServers(Dash):
         return WsgiToAsgi(self.server)
 
 
-class PyScriptDash(Dash):
+class PyScript(Dash):
     '''
+    Class adds Js & CSS which needed to work PyScript
     '''
+    # TODO: Make py-config tag to header
+    # TODO: Make py-script tag
 
     def __init__(
         self,
-        prevent_initial_callbacks: bool = False,
-        suppress_callback_exceptions: bool = True,
         **kw
     ):
 
+        # Adding Javascript for PyScript
         external_scripts = external_scripts = [
             {
-                'src': 'https://pyscript.net/alpha/pyscript.js',
+                'src': 'https://pyscript.net/latest/pyscript.js',
                 'crossorigin': 'defer'
             }
         ]
-        self._external_scripts = self._external_scripts if hasattr(self, '_external_scripts') else []
+        self._external_scripts = getattr(self, '_external_scripts', None) or []
         self._external_scripts.extend(external_scripts)
-        if 'external_scripts' in kw and kw['external_scripts'] != '':
+        if 'external_scripts' in kw and isinstance(kw['external_scripts'], list[dict]):
             self._external_scripts.extend(kw['external_scripts'])
 
-        # An adding corporate styles
+        # An adding corporate styles & PyScript styles
         external_stylesheets = [
             {
-                'href': 'https://pyscript.net/alpha/pyscript.css',
-                'rel': 'stylesheet'
-            },
-            {
-                'href': 'https://pyscript.net/alpha/pyscript.css',
+                'href': 'https://pyscript.net/latest/pyscript.css',
                 'rel': 'stylesheet'
             }
         ]
-        self._external_stylesheets = self._external_stylesheets if hasattr(self, '_external_stylesheets') else []
+        self._external_stylesheets = getattr(self, '_external_stylesheets', None) or []
         self._external_stylesheets.extend(external_stylesheets)
-        if 'external_stylesheets' in kw and kw['external_stylesheets'] != '':
+        if 'external_stylesheets' in kw and isinstance(kw['external_stylesheets'], list[dict]):
             self._external_stylesheets.extend(kw['external_stylesheets'])
 
-        meta_tags = [
-        ]
-        self._meta_tags = self._meta_tags if hasattr(self, '_meta_tags') else []
+        # Adding custom metatag
+        meta_tags = []
+        self._meta_tags = getattr(self, '_meta_tags', None) or []
         self._meta_tags.extend(meta_tags)
         if 'meta_tags' in kw and kw['meta_tags'] != '':
             self._external_stylesheets.extend(kw['meta_tags'])
 
         super().__init__(
             url_base_pathname=base_url,
-            prevent_initial_callbacks=prevent_initial_callbacks,
-            suppress_callback_exceptions=suppress_callback_exceptions,
             meta_tags=self._meta_tags,
             external_stylesheets=self._external_stylesheets,
             external_scripts=self._external_scripts,
@@ -287,8 +329,11 @@ class PyScriptDash(Dash):
         )
 
 
-class CoLabDash(JupyterDash):
+class CoLab(JupyterDash):
     '''
+    Make the application with jupyter notebook.
+
+    Run as cell's output or in another tab.
     '''
 
     def __init__(
@@ -304,6 +349,10 @@ class CoLabDash(JupyterDash):
         self._host = host
 
     def cell(self, **kw):
+        '''
+        Run Dash inside cell's output
+        '''
+
         self.run_server(
             mode='inline',
             host=self._host,
@@ -315,6 +364,10 @@ class CoLabDash(JupyterDash):
         )
 
     def page(self, **kw):
+        '''
+        Run application in jupyter session
+        '''
+
         self.run_server(
             mode='jupyterlab',
             host=self._host,
@@ -325,3 +378,10 @@ class CoLabDash(JupyterDash):
             threaded=True,
             **kw
         )
+
+    def stop_jupyter(self):
+        '''
+        Stop Dash server.
+        '''
+
+        self._server_threads[(self._host, self._port)].kill()

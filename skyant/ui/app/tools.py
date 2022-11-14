@@ -1,4 +1,6 @@
-# pylint: disable=missing-docstring
+'''
+Other tools for building UI.
+'''
 
 from os import environ as _env
 
@@ -9,6 +11,7 @@ _base_url = _env.get('BASE_URL', '/')
 def check_router(url: str, router: str) -> bool:
     '''
     Verify routing path including BASE_URL.
+    It is an assistant for making a multipage application.
 
     Args:
         url: current page url
