@@ -3,8 +3,9 @@ nav:
 
     - 'HOME': index.md
     - 'QUICK START': start.md
-    - 'BOOTSTRAPPED': bootstrapped.md
-    - 'SERVERS': servers.md
+    - 'BUILDING': building.md
+    - 'DESIGN': design.md
+    - 'SERVING': serving.md
     - 'REFERENCES':
         - references/index.md
         - 'BOOTSTRAPPED': references/bootstrapped.md
@@ -39,7 +40,6 @@ theme:
         - search.highlight
         - search.suggest
         - navigation.tabs
-        - navigation.tabs.sticky
         - content.code.annotate
 
 
@@ -89,3 +89,7 @@ markdown_extensions:
     - pymdownx.inlinehilite
     - pymdownx.snippets
     - pymdownx.superfences
+    - admonition
+    - pymdownx.details
+    - footnotes
+    - attr_list
