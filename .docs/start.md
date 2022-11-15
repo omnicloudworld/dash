@@ -47,7 +47,7 @@ if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8008)
 ```
 
-Please found more details about the class Bootstrapped [here](bootstrapped.md).
+Please found more details about the class Bootstrapped [at the design page](design.md).
 
 Definitely you can add global (corporate) CSS
 ```py linenums='1' title='index.py'
@@ -89,7 +89,7 @@ app = Servers('Name')
 hypercorn -w 1 --bind 0.0.0.0:8008 index:app.asgi_server
 ```
 
-Please fount more details on [the Servers page](servers.md).
+Please fount more details on [the Servers page](serving.md).
 
 
 ## Serving any files
@@ -97,7 +97,7 @@ Please fount more details on [the Servers page](servers.md).
 The class skyant.ui.app.Servers provides features for serving any local files that located in
     the directory 'static' near the application file.
 
-Please fount more details on [the Servers page](servers.md).
+Please fount more details on [the Servers page](serving.md).
 
 
 ## Jupyter/CoLab
