@@ -126,7 +126,7 @@ class Bootstrapped(Dash):
         self._external_stylesheets.extend([dbc.icons.FONT_AWESOME, dbc.icons.BOOTSTRAP])
         if bootstrap_theme:
             self._external_stylesheets.append(bootstrap_theme)
-        if 'external_stylesheets' in kw and isinstance(kw['external_stylesheets'], list[dict]):
+        if 'external_stylesheets' in kw and isinstance(kw['external_stylesheets'], list):
             self._external_stylesheets.extend(kw['external_stylesheets'])
             del kw['external_stylesheets']
 
@@ -136,7 +136,7 @@ class Bootstrapped(Dash):
         ]
         self._meta_tags = self._meta_tags if hasattr(self, '_meta_tags') else []
         self._meta_tags.extend(meta_tags)
-        if 'meta_tags' in kw and isinstance(kw['meta_tags'], list[dict]):
+        if 'meta_tags' in kw and isinstance(kw['meta_tags'], list):
             self._external_stylesheets.extend(kw['meta_tags'])
             del kw['meta_tags']
 
@@ -308,7 +308,7 @@ class PyScript(Dash):
         ]
         self._external_scripts = getattr(self, '_external_scripts', None) or []
         self._external_scripts.extend(external_scripts)
-        if 'external_scripts' in kw and isinstance(kw['external_scripts'], list[dict]):
+        if 'external_scripts' in kw and isinstance(kw['external_scripts'], list):
             self._external_scripts.extend(kw['external_scripts'])
 
         # An adding corporate styles & PyScript styles
@@ -320,7 +320,7 @@ class PyScript(Dash):
         ]
         self._external_stylesheets = getattr(self, '_external_stylesheets', None) or []
         self._external_stylesheets.extend(external_stylesheets)
-        if 'external_stylesheets' in kw and isinstance(kw['external_stylesheets'], list[dict]):
+        if 'external_stylesheets' in kw and isinstance(kw['external_stylesheets'], list):
             self._external_stylesheets.extend(kw['external_stylesheets'])
 
         # Adding custom metatag
