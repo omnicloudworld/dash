@@ -72,6 +72,9 @@ class Bootstrapped(Dash):
         prevent_initial_callbacks: bool = False,
         suppress_callback_exceptions: bool = True,
         default_theme: Themes = Themes.COSMO,
+        store_local: bool = False,
+        store_session: bool = False,
+        store_memory: bool = False,
         **kw
     ):
 
@@ -152,16 +155,23 @@ class Bootstrapped(Dash):
 
         #  Make layout
         self._page = html.Section(id='page')
-        self._location = html.Div(  # for read url from dash
-            [
-                dcc.Location(id='url', refresh=False)
-            ],
-            id='location',
+
+        children = [dcc.Location(id='url')]
+        if store_local:
+            children.append(dcc.Store(id='store-local', storage_type='local'))
+        if store_memory:
+            children.append(dcc.Store(id='store-memory', storage_type='memory'))
+        if store_session:
+            children.append(dcc.Store(id='store-session', storage_type='session'))
+
+        self._skyant = html.Div(
+            children,
+            id='skyant',
             style={'display': 'none'}
         )
         self.layout = html.Div(
             [
-                self._location,
+                self._skyant,
                 self._page
             ],
             id='root'
@@ -196,7 +206,7 @@ class Bootstrapped(Dash):
         self._page.children = children
         layout = html.Div(
             [
-                self._location,
+                self._skyant,
                 self._page
             ]
         )
