@@ -80,8 +80,3 @@ app.layouter(
     html.Div('content')
 )
 ```
-
-
-## URL routing
-
-

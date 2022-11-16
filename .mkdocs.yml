@@ -3,9 +3,9 @@ nav:
 
     - 'HOME': index.md
     - 'QUICK START': start.md
-    - 'BUILDING': building.md
+    - 'MAKING': making.md
     - 'DESIGN': design.md
-    - 'SERVING': serving.md
+    - 'RUNNING': running.md
     - 'REFERENCES':
         - references/index.md
         - 'BOOTSTRAPPED': references/bootstrapped.md
