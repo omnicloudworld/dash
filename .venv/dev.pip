@@ -1,7 +1,8 @@
-dash[compress]
+dash[compress]>=2.5
 dash-bootstrap-components
 python-jose
 asgiref
 hypercorn
 jupyter-dash
 python-dotenv
+mkdocs-glightbox

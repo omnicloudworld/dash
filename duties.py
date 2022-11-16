@@ -92,6 +92,6 @@ def devinit(ctx):
     '''
 
     ctx.run('python3.10 -m venv .venv/dev', title='Make venv')
-    ctx.run('. .venv/dev/bin/activate', title='Activate')
+    ctx.run('./.venv/dev/bin/activate', title='Activate')
     ctx.run('pip3 install --upgrade pip', title='Upgrade pip')
     ctx.run('pip3 install --upgrade -r .venv/dev.pip', title='Installing requirements')

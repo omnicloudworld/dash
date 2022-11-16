@@ -16,12 +16,11 @@ from asgiref.wsgi import WsgiToAsgi
 from hypercorn.middleware import AsyncioWSGIMiddleware
 
 import dash_bootstrap_components as dbc
-from dash import Dash, dcc, html
-from dash.development.base_component import Component
+from dash import Dash, dcc, html, page_container
 from jupyter_dash import JupyterDash
 
 
-base_url = env.get('BASE_URL', '/')
+base_url = env.get('BASE_URL', None) or env.get('DASH_URL_BASE_PATHNAME', '/')
 static_path = path.join(path.dirname(path.abspath(__file__)), 'static')
 
 
@@ -69,8 +68,6 @@ class Bootstrapped(Dash):
     def __init__(
         self,
         name: str,
-        prevent_initial_callbacks: bool = False,
-        suppress_callback_exceptions: bool = True,
         default_theme: Themes = Themes.COSMO,
         store_local: bool = False,
         store_session: bool = False,
@@ -107,7 +104,7 @@ class Bootstrapped(Dash):
                     'https://fonts.googleapis.com/css2?',
                     'family=Comfortaa:wght@300;400;600;700&',
                     'family=Montserrat:ital,wght@0,100;0,200;0,400;0,600;1,100;1,200;1,400;1,600&',
-                    'family=Roboto:ital,wght@0,100;0,300;0,500;1,100;1,300;1,500&'
+                    'family=Roboto:ital,wght@0,100;0,300;0,500;1,100;1,300;1,500&',
                     'display=swap'
                 ]),
                 'rel': 'stylesheet'
@@ -130,33 +127,24 @@ class Bootstrapped(Dash):
             self._external_stylesheets.extend(kw['external_stylesheets'])
             del kw['external_stylesheets']
 
-        # Adding metatags
-        meta_tags = [
-            {"name": "viewport", "content": "width=device-width, initial-scale=1"}
-        ]
-        self._meta_tags = self._meta_tags if hasattr(self, '_meta_tags') else []
-        self._meta_tags.extend(meta_tags)
-        if 'meta_tags' in kw and isinstance(kw['meta_tags'], list):
-            self._external_stylesheets.extend(kw['meta_tags'])
-            del kw['meta_tags']
-
         super().__init__(
             name=re.sub(r'[ ]+', '', name.title()),
             title=name.upper(),
             compress=True,
+            use_pages=True,
             url_base_pathname=base_url,
-            prevent_initial_callbacks=prevent_initial_callbacks,
-            suppress_callback_exceptions=suppress_callback_exceptions,
-            meta_tags=self._meta_tags,
             external_stylesheets=self._external_stylesheets,
             external_scripts=self._external_scripts,
             **kw
         )
 
         #  Make layout
-        self._page = html.Section(id='page')
+        self._page = html.Section(
+            page_container,
+            id='page'
+        )
 
-        children = [dcc.Location(id='url')]
+        children = []
         if store_local:
             children.append(dcc.Store(id='store-local', storage_type='local'))
         if store_memory:
@@ -164,14 +152,14 @@ class Bootstrapped(Dash):
         if store_session:
             children.append(dcc.Store(id='store-session', storage_type='session'))
 
-        self._skyant = html.Div(
+        self._system = html.Div(
             children,
-            id='skyant',
+            id='system',
             style={'display': 'none'}
         )
         self.layout = html.Div(
             [
-                self._skyant,
+                self._system,
                 self._page
             ],
             id='root'
@@ -195,22 +183,6 @@ class Bootstrapped(Dash):
             A permitted theme
         '''
         return Themes
-
-    def layouter(self, children: list[Component] | Component):
-        '''
-        This method fill the page layout, exclude location
-
-        Args:
-            children: layout for rendering inside the page section
-        '''
-        self._page.children = children
-        layout = html.Div(
-            [
-                self._skyant,
-                self._page
-            ]
-        )
-        self.layout = layout
 
     @property
     def name(self) -> str:

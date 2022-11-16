@@ -20,7 +20,7 @@ EMAIL: info@skyant.dev
 
 PYTHON_REQ: '>=3.10'
 REQUIREMENTS:
-    -   dash[compress]
+    -   dash[compress]>=2.5
     -   dash-bootstrap-components
     -   python-jose
     -   asgiref

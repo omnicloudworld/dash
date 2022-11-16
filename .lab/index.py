@@ -1,21 +1,13 @@
 #!/usr/bin/env python3.10
-'''
-'''
 
-from dash import html
-
-from skyant.ui.app import Bootstrapped, Servers
-
-class My(Servers, Bootstrapped):
-    pass
+from skyant.ui.app import Bootstrapped
 
 
-app = My(name='sdsds')
-
-app.layout = html.Div(
-    'sds'
+app = Bootstrapped(
+    'Name',
+    default_theme=Bootstrapped.theme.SUPERHERO,
+    pages_folder='./.lab/pages'
 )
 
-server = app.asgi_server
 if __name__ == '__main__':
-    app.debug_server()
+    app.run_server(host='0.0.0.0', port=8008)
