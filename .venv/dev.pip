@@ -5,3 +5,4 @@ asgiref
 hypercorn
 jupyter-dash
 python-dotenv
+mkdocs-glightbox
