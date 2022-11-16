@@ -5,7 +5,8 @@ from skyant.ui.app import Bootstrapped
 
 app = Bootstrapped(
     'Name',
-    default_theme=Bootstrapped.theme.SUPERHERO
+    default_theme=Bootstrapped.theme.SUPERHERO,
+    pages_folder='./.lab/pages'
 )
 
 if __name__ == '__main__':
