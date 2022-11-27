@@ -75,5 +75,4 @@ pypi/conf.json
 .html
 .venv/*/
 
-assets/
-static/
+gcp.json

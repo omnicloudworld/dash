@@ -3,7 +3,8 @@ MODULES:
     -   skyant.ui
     -   skyant.ui.app
 
-VERSION: 1.2
+VERSION: 0.0
+MINOR: 1
 
 DESCR: Preconfigured Plotly Dash & some tools
 KEYWORDS: visualization, data, web, dash, react
