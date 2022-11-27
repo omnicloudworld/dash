@@ -19,10 +19,36 @@ repo_url: https://gitlab.com/skyant/python/ui
 repo_name: skyant/python/ui
 
 
+copyright: Copyright &copy; 2020 Iurii Tarasenko
+extra:
+    generator: true
+    homepage: https://skyant.dev
+
+    social:
+        
+        - icon: fontawesome/solid/sack-dollar
+          link: https://buymeacoffee.com/skyantdev
+          name: donation
+        
+        - icon: fontawesome/brands/linkedin
+          link: https://www.linkedin.com/company/skyantdev
+          name: news
+
+        - icon: fontawesome/solid/user-group
+          link: https://groups.google.com/a/skyant.dev/g/community?label=ui
+          name: community
+
+
+
+
+###
+#  Template
+###
 
 
 docs_dir: .docs
 edit_uri: ""
+
 
 theme: 
     name: material
@@ -44,26 +70,6 @@ theme:
         - content.tabs.link
 
 
-copyright: Copyright &copy; 2020 Iurii Tarasenko
-extra:
-    generator: true
-    homepage: https://skyant.dev
-
-    social:
-        
-        - icon: fontawesome/solid/sack-dollar
-          link: https://buymeacoffee.com/skyantdev
-          name: donation
-        
-        - icon: fontawesome/brands/linkedin
-          link: https://www.linkedin.com/company/skyantdev
-          name: news
-
-        - icon: fontawesome/solid/user-group
-          link: https://groups.google.com/a/skyant.dev/g/community?label=ui
-          name: community
-
-
 extra_css:
     - https://skyant.dev/static/css/skyant.css
     - https://skyant.dev/static/css/hide-title.css
@@ -77,12 +83,13 @@ plugins:
                 options:
                     show_source: true
                     show_root_full_path: false
-                    show_root_toc_entry: true
+                    show_root_toc_entry: false
                     show_bases: false
                     show_category_heading: false
     - search
     - section-index
     - glightbox
+    - include-markdown
 
 
 markdown_extensions:
@@ -98,3 +105,6 @@ markdown_extensions:
     - pymdownx.tabbed:
         alternate_style: true 
     - md_in_html
+    - def_list
+    - pymdownx.tasklist:
+        custom_checkbox: true
