@@ -38,7 +38,6 @@ deploy2gitlab:
 
 
 
-
 deploy2pypi:
     stage:  deploy
     image:  python:3.10-slim
@@ -50,6 +49,9 @@ deploy2pypi:
     only:
         refs:
             -   main
+        changes:
+            -   setup.yml
+
     script:
         -   pip3 install twine
         -   >
@@ -57,4 +59,3 @@ deploy2pypi:
             --repository-url https://upload.pypi.org/legacy/ 
             --username __token__ 
             --password $PYPIORG_TOKEN dist/*
-
