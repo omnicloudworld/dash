@@ -14,7 +14,7 @@ nav:
         - 'SERVERS': references/servers.md 
 
 
-site_name: omnicloud-dash
+site_name: Dash in Omnicloud
 repo_url: https://github.com/omnicloudworld/dash
 repo_name: omnicloudworld/dash
 
